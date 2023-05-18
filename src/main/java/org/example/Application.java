@@ -1,13 +1,13 @@
 package org.example;
 
-import java.util.Scanner;
+import org.example.service.ConsoleService;
 
 public class Application {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        System.out.print(" Enter name and surname \n");
-        String name = in.nextLine();
-        String surname = in.nextLine();
-        System.out.printf(" Name is " + name, "and surname is" + surname);
+        ConsoleService consoleService = new ConsoleService();
+        consoleService.printInput("Enter name and surname ");
+        String name = consoleService.getInput();
+        String surname = consoleService.getInput();
+        consoleService.printInput(" Name is " + name + " and surname is " + surname);
     }
 }
