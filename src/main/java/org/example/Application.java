@@ -7,24 +7,20 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Application {
-    private static Connection con;
-    private static Statement stmt;
-    private static final String url = "jdbc:mysql://localhost:3306/shem";
-    private static final String username = "root";
-    private static final String password = "root";
 
+
+    Connection con;
+    Statement stmt;
+    String url = "jdbc:mysql://localhost:3306/shem";
+    String username = "root";
+    String password = "root";
 
 
     public static void main(String[] args) throws SQLException {
-
-
-
-
+        Application x = new Application();
         System.out.println("Connecting database...");
-        con = DriverManager.getConnection(url, username, password);
-        stmt = con.createStatement();
-
-
+        x.con = DriverManager.getConnection(x.url, x.username, x.password);
+        x.stmt = x.con.createStatement();
         Scanner in = new Scanner(System.in);
         System.out.print(" Enter name, surname and email \n");
         String name = in.nextLine();
@@ -32,6 +28,6 @@ public class Application {
         String email = in.nextLine();
         String query = "INSERT INTO shem.persons (name, surname, email) \n" +
                 " VALUES ('" + name + "' , '" + surname + "' , '" +  email+ "');";
-        stmt.executeUpdate(query);
+        x.stmt.executeUpdate(query);
     }
 }
