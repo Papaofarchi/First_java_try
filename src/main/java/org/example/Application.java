@@ -1,35 +1,34 @@
 package org.example;
 
-import org.example.service.ConsoleService;
+import lombok.SneakyThrows;
+import org.example.dao.RepositoryService;
+import org.example.entity.Person;
+import org.example.entity.PhoneDetails;
+import org.example.service.GeneralPersonService;
+import org.example.service.ParsingService;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Application {
 
-
-    Connection con;
-    Statement stmt;
-    String url = "jdbc:mysql://localhost:3306/shem";
-    String username = "root";
-    String password = "root";
-
-
-    public static void main(String[] args) throws SQLException {
-        Application x = new Application();
-        ConsoleService consoleService= new ConsoleService();
+    @SneakyThrows
+    public static void main(String[] args) {
+        RepositoryService repo = new RepositoryService();
+        ParsingService parse = new ParsingService();
+        GeneralPersonService general = new GeneralPersonService();
+        List<Person> persons = new ArrayList<>();
+        List<PhoneDetails> phoneNumbers = new ArrayList<>();
         System.out.println("Connecting database...");
-        x.con = DriverManager.getConnection(x.url, x.username, x.password);
-        x.stmt = x.con.createStatement();
-
-        System.out.print(" Enter name, surname and email \n");
-        String name = consoleService.getInput();
-        String surname = consoleService.getInput();
-        String email = consoleService.getInput();
-        String query = "INSERT INTO shem.persons (name, surname, email) \n" +
-                " VALUES ('" + name + "' , '" + surname + "' , '" +  email+ "');";
-        x.stmt.executeUpdate(query);
+        FileReader fileReader = new FileReader("output.json");
+        persons = parse.parsePersons(fileReader, persons);
+        general.migratePhoneNumbers(persons);
+        repo.savePersons(persons);
+        parse.queryPhones(phoneNumbers);
+        repo.savePhoneNumbers(phoneNumbers);
+        repo.setPersonProperties();
+        System.out.println("Data inserted successfully");
     }
 }

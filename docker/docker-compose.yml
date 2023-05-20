@@ -1,0 +1,14 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shem
+      MYSQL_TCP_PORT: 3366
+    ports:
+      - "1488:3366"
+    volumes:
+      - data:/var/lib/mysql
+volumes:
+  data:
