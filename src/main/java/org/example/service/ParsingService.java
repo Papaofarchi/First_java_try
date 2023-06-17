@@ -8,7 +8,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,17 +26,16 @@ public class ParsingService {
             Person person = new Person();
             String name = (String) jsonObject.get("name");
             String surname = (String) jsonObject.get("surname");
-            String email = (String) jsonObject.get("email");
             person.setName(name);
             person.setSurname(surname);
-            person.setEmail(email);
             persons.add(person);
         }
         fileReader.close();
         return persons;
     }
 
-    public void queryPhones(List<PhoneDetails> phoneNumbers) throws IOException, InterruptedException {
+    @SneakyThrows
+    public void queryPhones(List<PhoneDetails> phoneNumbers) {
         String token = "dd3aa879a0a35489e1b2e7a721ce3fdc9d871a3f";
         GeneralPersonService general = new GeneralPersonService();
         var client = HttpClient.newHttpClient();

@@ -70,6 +70,21 @@
             <version>5.0.1</version>
         </dependency>
 
+            <!-- JavaMail API -->
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>javax.mail</artifactId>
+                <version>1.6.2</version>
+            </dependency>
+            <!-- Java Activation Framework -->
+            <dependency>
+                <groupId>com.sun.activation</groupId>
+                <artifactId>javax.activation</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+
+
+
     </dependencies>
 
 

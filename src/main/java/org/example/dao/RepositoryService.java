@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
+import org.example.service.EmailService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -78,37 +79,65 @@ public class RepositoryService {
         session.close();
     }
 
-    public void setPersonProperties() {
+    public List<Person> getPersons() {
         Session sessionPerson = getSession("person");
-        Session sessionPhone = getSession("phone");
-        List<Person> updatePersons = new ArrayList<>();
-        String sub;
-        Person updatePerson;
+        List<Person> getPersons = new ArrayList<>();
+        Person getPerson;
         for (int i = 1; ; ) {
-            updatePerson = sessionPerson.get(Person.class, i++);
-            if (updatePerson != null) {
-                sub = updatePerson.getPhone().substring(3, 6);
-                switch (sub) {
-                    case "905":
-                        updatePerson.setPhoneDetails(sessionPhone.get(PhoneDetails.class, 1));
-                        break;
-                    case "926":
-                        updatePerson.setPhoneDetails(sessionPhone.get(PhoneDetails.class, 2));
-                        break;
-                    case "950":
-                        updatePerson.setPhoneDetails(sessionPhone.get(PhoneDetails.class, 3));
-                        break;
-                    case "910":
-                        updatePerson.setPhoneDetails(sessionPhone.get(PhoneDetails.class, 4));
-                        break;
-                    default:
-                        updatePerson.setPhoneDetails(sessionPhone.get(PhoneDetails.class, 5));
-                        break;
-                }
-                updatePersons.add(updatePerson);
+            getPerson = sessionPerson.get(Person.class, i++);
+            if (getPerson != null) {
+                getPersons.add(getPerson);
             } else break;
         }
-        updatePersons(updatePersons);
+        return getPersons;
+    }
+
+    public List<PhoneDetails> getPhoneDetails() {
+        Session sessionPhone = getSession("phone");
+        List<PhoneDetails> getPhones = new ArrayList<>();
+        PhoneDetails getPhone;
+        for (int i = 1; ; ) {
+            getPhone = sessionPhone.get(PhoneDetails.class, i++);
+            if (getPhone != null) {
+                getPhones.add(getPhone);
+            } else break;
+        }
+        return getPhones;
+    }
+
+    public void setPersonProperties() {
+        List<Person> updatedPersons = getPersons();
+        List<PhoneDetails> phoneDetails = getPhoneDetails();
+        String sub;
+        for (Person updatedPerson : updatedPersons) {
+            sub = updatedPerson.getPhone().substring(3, 6);
+            switch (sub) {
+                case "905":
+                    updatedPerson.setPhoneDetails(phoneDetails.get(0));
+                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    break;
+                case "926":
+                    updatedPerson.setPhoneDetails(phoneDetails.get(1));
+                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    break;
+                case "950":
+                    updatedPerson.setPhoneDetails(phoneDetails.get(2));
+                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    break;
+                case "910":
+                    updatedPerson.setPhoneDetails(phoneDetails.get(3));
+                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    break;
+                default:
+                    updatedPerson.setPhoneDetails(phoneDetails.get(4));
+                    updatedPerson.setEmail("none");
+                    break;
+            }
+        }
+        updatePersons(updatedPersons);
     }
 }
+
+
+
 

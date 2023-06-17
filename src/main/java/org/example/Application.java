@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.example.dao.RepositoryService;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
+import org.example.service.EmailService;
 import org.example.service.GeneralPersonService;
 import org.example.service.ParsingService;
 
@@ -19,6 +20,7 @@ public class Application {
         RepositoryService repo = new RepositoryService();
         ParsingService parse = new ParsingService();
         GeneralPersonService general = new GeneralPersonService();
+        EmailService emailService = new EmailService();
         List<Person> persons = new ArrayList<>();
         List<PhoneDetails> phoneNumbers = new ArrayList<>();
         System.out.println("Connecting database...");
@@ -30,5 +32,7 @@ public class Application {
         repo.savePhoneNumbers(phoneNumbers);
         repo.setPersonProperties();
         System.out.println("Data inserted successfully");
+        System.out.println("Beginning of spam attack");
+        emailService.spamAttack(repo.getPersons());
     }
 }
