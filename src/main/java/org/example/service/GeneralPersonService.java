@@ -1,15 +1,18 @@
 package org.example.service;
 
+import org.example.configuration.PhoneConfiguration;
 import org.example.entity.OperatorStatus;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GeneralPersonService {
-    PhoneService phoneService = new PhoneService();
+    ApplicationContext context = new AnnotationConfigApplicationContext(PhoneConfiguration .class);
+    PhoneService phoneService = context.getBean(PhoneService.class);
 
     public void migratePhoneNumbers(List<Person> persons) {
         for (Person person : persons) {
@@ -28,7 +31,6 @@ public class GeneralPersonService {
         }
         return queryOperators;
     }
-
 
 
 }

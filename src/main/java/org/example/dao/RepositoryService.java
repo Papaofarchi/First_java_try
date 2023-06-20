@@ -7,11 +7,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class RepositoryService {
+    @Autowired
+    private EmailService emailService;
     private static final SessionFactory sessionFactoryPerson;
     private static final SessionFactory sessionFactoryPhone;
 
@@ -114,19 +118,19 @@ public class RepositoryService {
             switch (sub) {
                 case "905":
                     updatedPerson.setPhoneDetails(phoneDetails.get(0));
-                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
                     break;
                 case "926":
                     updatedPerson.setPhoneDetails(phoneDetails.get(1));
-                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
                     break;
                 case "950":
                     updatedPerson.setPhoneDetails(phoneDetails.get(2));
-                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
                     break;
                 case "910":
                     updatedPerson.setPhoneDetails(phoneDetails.get(3));
-                    updatedPerson.setEmail(EmailService.generateEmail(updatedPerson));
+                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
                     break;
                 default:
                     updatedPerson.setPhoneDetails(phoneDetails.get(4));

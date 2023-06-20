@@ -6,6 +6,7 @@ import org.example.entity.PhoneDetails;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.net.URI;
@@ -15,7 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.function.Supplier;
 
-
+@Service
 public class ParsingService {
     @SneakyThrows
     public List<Person> parsePersons(FileReader fileReader, List<Person> persons) {
