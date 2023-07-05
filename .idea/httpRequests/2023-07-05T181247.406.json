@@ -1,0 +1,6 @@
+{
+  "timestamp": "2023-07-05T15:12:47.347+00:00",
+  "status": 406,
+  "error": "Not Acceptable",
+  "path": "/api/v1/persons/emailSend"
+}

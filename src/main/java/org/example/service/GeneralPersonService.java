@@ -1,18 +1,44 @@
 package org.example.service;
 
-import org.example.configuration.PhoneConfiguration;
+import lombok.SneakyThrows;
+import org.example.dao.RepositoryService;
 import org.example.entity.OperatorStatus;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class GeneralPersonService {
-    ApplicationContext context = new AnnotationConfigApplicationContext(PhoneConfiguration .class);
-    PhoneService phoneService = context.getBean(PhoneService.class);
+    @Autowired
+    ParsingService parse;
+    @Autowired
+    RepositoryService repo;
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    private PhoneService phoneService;
+
+
+    @SneakyThrows
+    public void init() {
+        List<Person> persons = new ArrayList<>();
+        List<PhoneDetails> phoneNumbers = new ArrayList<>();
+        System.out.println("Connecting database...");
+        FileReader fileReader = new FileReader("output.json");
+        persons = parse.parsePersons(fileReader, persons);
+        migratePhoneNumbers(persons);
+        repo.savePersons(persons);
+        parse.queryPhones(phoneNumbers);
+        repo.savePhoneNumbers(phoneNumbers);
+        repo.setPersonProperties();
+        System.out.println("Data inserted successfully");
+        System.out.println("Beginning of spam attack");
+        emailService.sendEmail(repo.getPersons());
+    }
 
     public void migratePhoneNumbers(List<Person> persons) {
         for (Person person : persons) {

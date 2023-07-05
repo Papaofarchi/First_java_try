@@ -1,7 +1,9 @@
 package org.example.service;
 
-import java.util.Scanner;
+import org.springframework.stereotype.Service;
 
+import java.util.Scanner;
+@Service
 public class ConsoleService {
     Scanner in = new Scanner(System.in);
 

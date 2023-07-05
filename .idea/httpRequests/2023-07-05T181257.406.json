@@ -1,0 +1,6 @@
+{
+  "timestamp": "2023-07-05T15:12:57.581+00:00",
+  "status": 406,
+  "error": "Not Acceptable",
+  "path": "/api/v1/persons/parse"
+}
