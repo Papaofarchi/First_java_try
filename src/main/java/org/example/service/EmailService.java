@@ -2,7 +2,6 @@ package org.example.service;
 
 
 import org.example.entity.Person;
-import org.springframework.stereotype.Service;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -13,7 +12,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-@Service
 public class EmailService {
     private final String emailTestJava = "testjava32@gmail.com";
     private final String passwordTestJava = "vxfltqmpqaprtcbo";

@@ -1,22 +1,22 @@
 package org.example.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.FileReader;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.function.Supplier;
-@Service
+
 public class ParsingService {
+    @Autowired
+    private PhoneService phone;
+
     @SneakyThrows
     public List<Person> parsePersons(FileReader fileReader, List<Person> persons) {
         JSONParser parser = new JSONParser();
@@ -37,19 +37,15 @@ public class ParsingService {
     @SneakyThrows
     public void queryPhones(List<PhoneDetails> phoneNumbers) {
         String token = "dd3aa879a0a35489e1b2e7a721ce3fdc9d871a3f";
-        GeneralPersonService general = new GeneralPersonService();
-        var client = HttpClient.newHttpClient();
-        List<PhoneDetails> queriedPhones = general.setOperatorsQuery();
+        RestTemplate restTemplate = new RestTemplate();
+        List<PhoneDetails> queriedPhones = phone.setOperatorsQuery();
         String phoneQuery;
         for (PhoneDetails phoneNumber : queriedPhones) {
             phoneQuery = phoneNumber.getOperatorCode() + "0000000";
-            var request = HttpRequest.newBuilder(
-                            URI.create("https://api.regius.name/iface/phone-number.php?phone=" + phoneQuery + "&token=" + token))
-                    .header("accept", "application/json")
-                    .build();
-
-            HttpResponse<Supplier<PhoneDetails>> response = client.send(request, new JsonBodyHandler<>(PhoneDetails.class));
-            PhoneDetails answer = response.body().get();
+            String url = "https://api.regius.name/iface/phone-number.php?phone=" + phoneQuery + "&token=" + token;
+            String json = restTemplate.getForObject(url, String.class);
+            ObjectMapper mapper = new ObjectMapper();
+            PhoneDetails answer = mapper.readValue(json, PhoneDetails.class);
 
             if (answer.getTime() != null & answer.getRegion() != null) {
                 answer.setOperatorCode(phoneNumber.getOperatorCode());
@@ -65,6 +61,7 @@ public class ParsingService {
         noneOperator.setRegion("none");
         phoneNumbers.add(noneOperator);
     }
+
 }
 
 
