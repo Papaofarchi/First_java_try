@@ -31,7 +31,7 @@ public class RestController {
     @GetMapping("/api/v1/persons/run")
     @ResponseBody
     public String runForPerson() {
-        System.out.println("Application started successfully");
+        System.out.println("Person application started successfully");
         generalPerson.init();
         return "Fuck you";
     }

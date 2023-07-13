@@ -18,7 +18,7 @@ public class GeneralClientService {
         ChatHistory oneMessage = new ChatHistory();
         oneMessage.setTime(getCurrentTime());
         oneMessage.setUsername(clientDto.getNickname());
-        oneMessage.setMessage("joined the server");
+        oneMessage.setMessage("joined the chat");
         repo.saveOrUpdateOneMessage(oneMessage);
     }
     public static String getCurrentTime() {

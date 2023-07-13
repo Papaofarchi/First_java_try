@@ -2,17 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Chat Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 <div id="messages">
     <div th:each="msg : ${messages}">
-        <span th:text="${msg.time}">Time</span>  <span th:text="${msg.username}">Username</span>: <span th:text="${msg.message}">Message</span>
+        <span th:text="${msg.time}">Time</span> <span th:text="${msg.username}">Username</span>: <span
+            th:text="${msg.message}">Message</span>
     </div>
 </div>
 <form th:action="@{/discussion}" th:object="${message}" method="post">
     <input type="text" th:field="*{message}" placeholder="Enter your message" required>
     <button type="submit">Send</button>
 </form>
+<script>
+    $("#chat-form").submit(function (event) {
+        event.preventDefault();
+        var message = $("#chat-input").val();
+        $.post("/discussion", {message: message}, function (data) {
+
+            console.log(data);
+            $("#chat-input").val("");
+        });
+    });
+    function getMessages() {
+        $.get("/discussion", function (data) {
+
+            console.log(data);
+            $("#messages").html(data);
+        });
+    }
+
+    setInterval(getMessages, 1000);
+</script>
 </body>
 </html>
 
