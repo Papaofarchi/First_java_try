@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.entity.ChatHistory;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
 import org.example.service.EmailService;
@@ -12,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepositoryService {
+public class PersonRepository {
     @Autowired
     private EmailService emailService;
     private static final SessionFactory sessionFactoryPerson;
     private static final SessionFactory sessionFactoryPhone;
+    private static final SessionFactory sessionFactoryHistory;
 
     static {
         Configuration configurationPerson = new Configuration();
@@ -28,58 +30,74 @@ public class RepositoryService {
         configurationPhone.configure("hibernate.cfg.xml");
         configurationPhone.addAnnotatedClass(PhoneDetails.class);
         sessionFactoryPhone = configurationPhone.buildSessionFactory();
+        Configuration configurationHistory = new Configuration();
+        configurationPhone.configure("hibernate.cfg.xml");
+        configurationPhone.addAnnotatedClass(ChatHistory.class);
+        sessionFactoryHistory = configurationPhone.buildSessionFactory();
     }
 
     private static SessionFactory getSessionFactory(String type) {
-        if (type == "person") {
-            return sessionFactoryPerson;
-        }
-        if (type == "phone") {
-            return sessionFactoryPhone;
+        switch (type) {
+
+            case "person":
+                return sessionFactoryPerson;
+
+            case "phone":
+                return sessionFactoryPhone;
+
+            case "history":
+                return sessionFactoryHistory;
+            default:
+                return null;
         }
 
-        return null;
     }
 
     private static Session getSession(String type) {
-        if (type == "person") {
-            return getSessionFactory("person").openSession();
-        }
-        if (type == "phone") {
-            return getSessionFactory("phone").openSession();
+        switch (type) {
+
+            case "person":
+                return getSessionFactory("person").openSession();
+
+            case "phone":
+                return getSessionFactory("phone").openSession();
+
+            case "history":
+                return getSessionFactory("history").openSession();
+            default:
+                return null;
         }
 
-        return null;
     }
 
     public void savePersons(List<Person> persons) {
-        Session session = getSession("person");
-        Transaction transaction = session.beginTransaction();
+        Session sessionPerson = getSession("person");
+        Transaction transaction = sessionPerson.beginTransaction();
         for (Person person : persons) {
-            session.save(person);
+            sessionPerson.save(person);
         }
         transaction.commit();
-        session.close();
+        sessionPerson.close();
     }
 
     public void updatePersons(List<Person> persons) {
-        Session session = getSession("person");
-        Transaction transaction = session.beginTransaction();
+        Session sessionPerson = getSession("person");
+        Transaction transaction = sessionPerson.beginTransaction();
         for (Person person : persons) {
-            session.update(person);
+            sessionPerson.update(person);
         }
         transaction.commit();
-        session.close();
+        sessionPerson.close();
     }
 
     public void savePhoneNumbers(List<PhoneDetails> phoneNumbers) {
-        Session session = getSession("phone");
-        Transaction transaction = session.beginTransaction();
+        Session sessionPhone = getSession("phone");
+        Transaction transaction = sessionPhone.beginTransaction();
         for (PhoneDetails phoneNumber : phoneNumbers) {
-            session.save(phoneNumber);
+            sessionPhone.save(phoneNumber);
         }
         transaction.commit();
-        session.close();
+        sessionPhone.close();
     }
 
     public List<Person> getPersons() {
@@ -106,6 +124,38 @@ public class RepositoryService {
             } else break;
         }
         return getPhones;
+    }
+
+    public void saveOrUpdateHistory(List<ChatHistory> history) {
+        Session sessionHistory = getSession("history");
+        Transaction transaction = sessionHistory.beginTransaction();
+        for (ChatHistory oneMessageOfHistory : history) {
+            sessionHistory.saveOrUpdate(oneMessageOfHistory);
+        }
+        transaction.commit();
+        sessionHistory.close();
+    }
+
+    public void saveOrUpdateOneMessage(ChatHistory oneMessage) {
+        Session sessionHistory = getSession("history");
+        Transaction transaction = sessionHistory.beginTransaction();
+        sessionHistory.saveOrUpdate(oneMessage);
+        transaction.commit();
+        sessionHistory.close();
+    }
+
+
+    public List<ChatHistory> getChatHistory() {
+        Session sessionHistory = getSession("history");
+        List<ChatHistory> chatHistory = new ArrayList<>();
+        ChatHistory oneMessageOfHistory;
+        for (int i = 1; ; ) {
+            oneMessageOfHistory = sessionHistory.get(ChatHistory.class, i++);
+            if (oneMessageOfHistory != null) {
+                chatHistory.add(oneMessageOfHistory);
+            } else break;
+        }
+        return chatHistory;
     }
 
     public void setPersonProperties() {

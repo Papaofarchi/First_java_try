@@ -1,6 +1,6 @@
 package org.example.configuration;
 
-import org.example.dao.RepositoryService;
+import org.example.dao.PersonRepository;
 import org.example.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,13 +26,21 @@ public class GeneralPersonConfiguration {
     public PhoneService phoneService() {
         return new PhoneService();
     }
+
     @Bean
     public ConsoleService consoleService() {
         return new ConsoleService();
     }
+
     @Bean
-    public RepositoryService repositoryService() {
-        return new RepositoryService();
+    public PersonRepository repositoryService() {
+        return new PersonRepository();
     }
+
+    @Bean
+    public GeneralClientService clientService() {
+        return new GeneralClientService();
+    }
+
 
 }

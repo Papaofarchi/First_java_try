@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chat Page</title>
+</head>
+<body>
+<div id="messages">
+    <div th:each="msg : ${messages}">
+        <span th:text="${msg.time}">Time</span>  <span th:text="${msg.username}">Username</span>: <span th:text="${msg.message}">Message</span>
+    </div>
+</div>
+<form th:action="@{/discussion}" th:object="${message}" method="post">
+    <input type="text" th:field="*{message}" placeholder="Enter your message" required>
+    <button type="submit">Send</button>
+</form>
+</body>
+</html>
+

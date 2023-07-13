@@ -1,6 +1,7 @@
 package org.example.service;
 
 
+import lombok.SneakyThrows;
 import org.example.entity.Person;
 
 import javax.mail.Authenticator;
@@ -20,7 +21,7 @@ public class EmailService {
     public String generateEmail(Person person) {
         return person.getName() + person.getSurname() + "@gmail.com";
     }
-
+@SneakyThrows
     public void sendEmail(List<Person> persons) {
         int i=0;
         for (Person person : persons) {
@@ -37,7 +38,7 @@ public class EmailService {
                     }
                 };
                 Session session = Session.getInstance(props, auth);
-                try {
+
                     MimeMessage message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(emailJava));
                     message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("korenevdenismain@gmail.com"));
@@ -47,11 +48,6 @@ public class EmailService {
                     Transport.send(message);
                     System.out.println("Message sent successfully");
                     i++;
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-
-                }
             }
             if (i==10) {
                 break;

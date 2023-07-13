@@ -1,7 +1,7 @@
 package org.example.service;
 
 import lombok.SneakyThrows;
-import org.example.dao.RepositoryService;
+import org.example.dao.PersonRepository;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class GeneralPersonService {
     @Autowired
     private ParsingService parse;
     @Autowired
-    private RepositoryService repo;
+    private PersonRepository repo;
     @Autowired
     private EmailService emailService;
     @Autowired

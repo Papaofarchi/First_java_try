@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Client Form</title>
+</head>
+<body>
+<form action="/chat/client/join" method="post">
+    <div>
+        <label for="nickname">Enter Nickname:</label>
+        <input type="text" id="nickname" name="nickname" required th:value="${clientDto.nickname}">
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

@@ -13,22 +13,17 @@ public class Person {
     @Column(name = "id")
     private Long id;
 
-
     @Column(name = "name")
     private String name;
-
 
     @Column(name = "surname")
     private String surname;
 
-
     @Column(name = "email")
     private String email;
 
-
     @Column(name = "phone")
     private String phone;
-
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "phone_details_id", referencedColumnName = "id")
