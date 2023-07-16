@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-persons-table.yaml
+  - include:
+      file: db/changelog/changeset/add-foreign-keys.yaml
+  - include:
+      file: db/changelog/changeset/change-column-persons.yaml
+  - include:
+      file: db/changelog/changeset/drop-not-null-constraint-persons.yaml
+  - include:
+      file: db/changelog/changeset/change-table-phone_details.yaml
+  - include:
+      file: db/changelog/changeset/change-column-phone_details.yaml
+  - include:
+      file: db/changelog/changeset/delete-duplicates-persons.yaml
+  - include:
+      file: db/changelog/changeset/change-column-messages.yaml

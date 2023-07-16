@@ -32,9 +32,9 @@ public class GeneralPersonService {
         parse.queryPhones(phoneNumbers);
         repo.savePhoneNumbers(phoneNumbers);
         repo.setPersonProperties();
-        System.out.println("Data inserted successfully");
-        System.out.println("Beginning of spam attack");
-        emailService.sendEmail(repo.getPersons());
+        //System.out.println("Data inserted successfully");
+        //System.out.println("Beginning of spam attack");
+        //emailService.sendEmail(repo.getPersons());
     }
 
     public void migratePhoneNumbers(List<Person> persons) {

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-keys
+      author: Papaofarchi
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: persons
+            baseColumnNames: phoneDetails_id
+            constraintName: fk_persons_phoneDetails
+            referencedTableName: phoneDetails
+            referencedColumnNames: id
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: history
+            baseColumnNames: person_id
+            constraintName: fk_history_persons
+            referencedTableName: persons
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: history
+            baseColumnNames: message_id
+            constraintName: fk_history_messages
+            referencedTableName: messages
+            referencedColumnNames: id
+            onDelete: CASCADE

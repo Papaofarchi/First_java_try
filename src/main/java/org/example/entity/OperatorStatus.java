@@ -1,7 +1,9 @@
 package org.example.entity;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum OperatorStatus {
     BEELINE("905"),
     MEGAFON("926"),
@@ -10,9 +12,5 @@ public enum OperatorStatus {
 
     @Getter
     private final String operatorCode;
-
-    OperatorStatus(String operatorCode) {
-        this.operatorCode = operatorCode;
-    }
 
 }

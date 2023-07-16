@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-column-messages
+      author: Papaofarchi
+      changes:
+        - renameColumn:
+           tableName: messages
+           newColumnName: created_at
+           oldColumnName: createdAt
+           columnDataType: datetime(6)

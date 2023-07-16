@@ -3,21 +3,21 @@ package org.example.controller;
 
 import org.example.dao.PersonRepository;
 import org.example.entity.ChatHistory;
-import org.example.entity.ClientDto;
+import org.example.entity.Person;
+import org.example.entity.PersonDto;
 import org.example.service.GeneralClientService;
 import org.example.service.GeneralPersonService;
-import org.example.service.ParsingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Controller
-@SessionAttributes("clientDto")
+@SessionAttributes({"personDto", "cacheUser", "messages"})
 public class RestController {
     @Autowired
     private GeneralPersonService generalPerson;
@@ -25,8 +25,6 @@ public class RestController {
     private GeneralClientService generalClient;
     @Autowired
     private PersonRepository repo;
-    @Autowired
-    private ParsingService parse;
 
     @GetMapping("/api/v1/persons/run")
     @ResponseBody
@@ -38,47 +36,55 @@ public class RestController {
 
     @GetMapping("/clientForm")
     public String showClientForm(Model model) {
-        ClientDto clientDto = new ClientDto();
-        model.addAttribute("clientDto", clientDto);
+        PersonDto personDto = new PersonDto();
+        model.addAttribute("personDto", personDto);
         return "clientForm";
     }
 
     @PostMapping("/chat/client/join")
-    public String setClientDto(@Valid @ModelAttribute ClientDto clientDto, Model model) {
-        generalClient.joinToServer(clientDto);
-        model.addAttribute("clientDto", clientDto);
+    public String join(@Valid @ModelAttribute PersonDto personDto, Model model) {
+        Person cacheUser = generalClient.joinChat(personDto);
+        model.addAttribute("cacheUser", cacheUser);
         return "redirect:/discussion";
+    }
+
+    @PostMapping("/chat/client/leave")
+    @ResponseBody
+    public String leave(@ModelAttribute("cacheUser") Person cacheUser) {
+        generalClient.leaveChat(cacheUser);
+        return "Пошел нахуй отсюда";
     }
 
     @GetMapping("discussion")
     public String getChatPage(Model model) {
-        List<ChatHistory> historyData = repo.getChatHistory();
-        List<ChatHistory> chatHistory;
-        if (historyData.size() > 0) {
-            chatHistory = historyData;
-        } else {
-            chatHistory = new ArrayList<>();
-        }
-        parse.sortChatHistory(chatHistory);
-        model.addAttribute("messages", chatHistory);
+        List<ChatHistory> cacheHistory = repo.getChatHistory();
+        model.addAttribute("messages", cacheHistory);
         model.addAttribute("message", new ChatHistory());
         return "discussion";
     }
 
     @PostMapping("discussion")
-    public String postMessage(@Valid @ModelAttribute ChatHistory oneMessage, @ModelAttribute("clientDto") ClientDto clientDto, Model model) {
-        List<ChatHistory> historyData = repo.getChatHistory();
-        List<ChatHistory> chatHistory;
-        if (historyData.size() > 0) {
-            chatHistory = historyData;
-        } else {
-            chatHistory = new ArrayList<>();
-        }
-        oneMessage.setTime(GeneralClientService.getCurrentTime());
-        oneMessage.setUsername(clientDto.getNickname());
-        chatHistory.add(oneMessage);
-        repo.saveOrUpdateHistory(chatHistory);
-        model.addAttribute("messages", chatHistory);
+    public String postMessage(@ModelAttribute("messages") List<ChatHistory> cacheHistory,
+                              @Valid @ModelAttribute ChatHistory oneHistoryEntry,
+                              @ModelAttribute("cacheUser") Person cacheUser,
+                              Model model) {
+        oneHistoryEntry.setPerson(cacheUser);
+        oneHistoryEntry.getMessage().setCreatedAt(ZonedDateTime.now());
+        cacheHistory.add(oneHistoryEntry);
+        repo.saveOneHistoryEntry(oneHistoryEntry);
+        model.addAttribute("messages", cacheHistory);
         return "redirect:/discussion";
     }
+
+    @PostMapping("filteredMessages")
+    public String showCertainMessages(@ModelAttribute("nicknameForFilter") String nicknameForFilter, Model model) {
+        List<ChatHistory> messagesOfCertainUser = repo.getMessagesOfCertainUser(nicknameForFilter);
+        if (messagesOfCertainUser.size() > 0) {
+            model.addAttribute("messages", messagesOfCertainUser);
+            return "filterMessages";
+        } else {
+            return "messagesNotFound";
+        }
+    }
+
 }

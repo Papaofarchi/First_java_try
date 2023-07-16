@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-column-persons
+      author: Papaofarchi
+      changes:
+        - renameColumn:
+            tableName: phone_details
+            newColumnName: operator_code
+            oldColumnName: operatorCode
+            columnDataType: varchar(255)

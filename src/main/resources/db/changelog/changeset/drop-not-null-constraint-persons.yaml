@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-not-null-constraint
+      author: Papaofarchi
+      changes:
+        - dropNotNullConstraint:
+            tableName: persons
+            columnName: email
+            columnDataType: varchar(255)

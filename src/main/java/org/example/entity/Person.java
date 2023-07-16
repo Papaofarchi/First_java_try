@@ -3,14 +3,14 @@ package org.example.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "person")
+@Table(name = "persons")
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
@@ -25,8 +25,15 @@ public class Person {
     @Column(name = "phone")
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "nickname")
+    private String nickname;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "phone_details_id", referencedColumnName = "id")
     private PhoneDetails phoneDetails;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<ChatHistory> chatHistories;
+
 
 }

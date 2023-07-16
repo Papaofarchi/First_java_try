@@ -3,29 +3,44 @@ package org.example.service;
 import lombok.SneakyThrows;
 import org.example.dao.PersonRepository;
 import org.example.entity.ChatHistory;
-import org.example.entity.ClientDto;
+import org.example.entity.Message;
+import org.example.entity.Person;
+import org.example.entity.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 public class GeneralClientService {
     @Autowired
     private PersonRepository repo;
 
     @SneakyThrows
-    public void joinToServer(ClientDto clientDto) {
-        ChatHistory oneMessage = new ChatHistory();
-        oneMessage.setTime(getCurrentTime());
-        oneMessage.setUsername(clientDto.getNickname());
-        oneMessage.setMessage("joined the chat");
-        repo.saveOrUpdateOneMessage(oneMessage);
+    public Person joinChat(PersonDto personDto) {
+        Person userForMerge = repo.getCertainPerson(personDto.getName(), personDto.getSurname());
+        userForMerge.setNickname(personDto.getNickname());
+        Person mergedUser = repo.savePerson(userForMerge);
+        Message oneMessage = new Message();
+        oneMessage.setCreatedAt(ZonedDateTime.now());
+        oneMessage.setBody("joined the chat");
+        ChatHistory oneHistoryEntry = new ChatHistory();
+        oneHistoryEntry.setPerson(mergedUser);
+        oneHistoryEntry.setMessage(oneMessage);
+        repo.saveOneHistoryEntry(oneHistoryEntry);
+        return mergedUser;
     }
-    public static String getCurrentTime() {
-        Date time = new Date();
-        SimpleDateFormat dataTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        return dataTimeFormat.format(time);
+
+    @SneakyThrows
+    public void leaveChat(Person user) {
+        Message oneMessage = new Message();
+        oneMessage.setCreatedAt(ZonedDateTime.now());
+        oneMessage.setBody("leave the chat");
+        ChatHistory oneHistoryEntry = new ChatHistory();
+        oneHistoryEntry.setPerson(user);
+        oneHistoryEntry.setMessage(oneMessage);
+        repo.saveOneHistoryEntry(oneHistoryEntry);
     }
+
+
 
 }
 

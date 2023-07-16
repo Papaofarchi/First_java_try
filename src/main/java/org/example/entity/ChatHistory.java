@@ -12,16 +12,15 @@ import javax.persistence.*;
 public class ChatHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "time")
-    private String time;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id")
+    private Person person;
 
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "message")
-    private String message;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "message_id", referencedColumnName = "id")
+    private Message message;
 
 
 }

@@ -2,7 +2,6 @@ package org.example.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.example.entity.ChatHistory;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
 import org.json.simple.JSONArray;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.FileReader;
-import java.util.Comparator;
 import java.util.List;
 
 public class ParsingService {
@@ -62,14 +60,6 @@ public class ParsingService {
         noneOperator.setTime("none");
         noneOperator.setRegion("none");
         phoneNumbers.add(noneOperator);
-    }
-    public void sortChatHistory(List<ChatHistory> chatHistory) {
-        chatHistory.sort(new Comparator<ChatHistory>() {
-            @Override
-            public int compare(ChatHistory o1, ChatHistory o2) {
-                return o1.getTime().compareTo(o2.getTime());
-            }
-        });
     }
 }
 

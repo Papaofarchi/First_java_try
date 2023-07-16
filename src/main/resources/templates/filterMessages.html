@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chat Page</title>
+</head>
+<body>
+<div id="messages">
+    <div th:each="msg : ${messages}">
+        <span th:text="${msg.getMessage().getDisplayedTime()}">Time</span> <span th:text="${msg.getPerson().getNickname()}">Nickname</span>:
+        <span th:text="${msg.getMessage().getBody()}">Message</span>
+    </div>
+</div>
+</body>
+</html>

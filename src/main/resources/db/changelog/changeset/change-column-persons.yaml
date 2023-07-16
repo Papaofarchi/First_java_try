@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-column-persons
+      author: Papaofarchi
+      changes:
+        - renameColumn:
+            tableName: persons
+            newColumnName: phone_details_id
+            oldColumnName: phoneDetails_id
+            columnDataType: bigint

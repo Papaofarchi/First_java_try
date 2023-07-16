@@ -6,8 +6,9 @@
 <body>
 <form action="/chat/client/join" method="post">
     <div>
-        <label for="nickname">Enter Nickname:</label>
-        <input type="text" id="nickname" name="nickname" required th:value="${clientDto.nickname}">
+        <input type="text" id="name" name="name" required th:value="${personDto.name}" placeholder="Enter your name">
+        <input type="text" id="surname" name="surname" required th:value="${personDto.surname}" placeholder="Enter your surname">
+        <input type="text" id="nickname" name="nickname" required th:value="${personDto.nickname}" placeholder="Enter your nickname">
     </div>
     <div>
         <button type="submit">Submit</button>

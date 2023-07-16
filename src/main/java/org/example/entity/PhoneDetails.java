@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
+
 
 @Data
 @Entity
-@Table(name = "phone_details")
+@Table(name = "phoneDetails")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PhoneDetails {
     @Id
@@ -30,7 +32,7 @@ public class PhoneDetails {
     @JsonProperty("utc")
     private String time;
 
-    @OneToOne(mappedBy = "phoneDetails")
-    private Person person;
+    @OneToMany (fetch = FetchType.EAGER, mappedBy = "phoneDetails", cascade = CascadeType.ALL)
+    private List<Person> person;
 
 }

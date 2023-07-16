@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-table-phone_details
+      author: Papaofarchi
+      changes:
+        - renameTable:
+            newTableName: phone_details
+            oldTableName: phoneDetails
