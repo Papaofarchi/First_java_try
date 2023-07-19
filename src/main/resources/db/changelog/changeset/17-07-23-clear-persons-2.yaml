@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-persons
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: persons
+            where: id >= 18 and id <= 35

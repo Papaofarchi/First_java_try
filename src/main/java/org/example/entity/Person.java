@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "persons")
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
@@ -33,7 +33,7 @@ public class Person {
     private PhoneDetails phoneDetails;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private List<ChatHistory> chatHistories;
+    private List<Message> messages;
 
 
 }

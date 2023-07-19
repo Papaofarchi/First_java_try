@@ -6,9 +6,9 @@
 <body>
 <form action="/chat/client/join" method="post">
     <div>
-        <input type="text" id="name" name="name" required th:value="${personDto.name}" placeholder="Enter your name">
-        <input type="text" id="surname" name="surname" required th:value="${personDto.surname}" placeholder="Enter your surname">
-        <input type="text" id="nickname" name="nickname" required th:value="${personDto.nickname}" placeholder="Enter your nickname">
+        <input type="text" id="name" name="name" required th:value="${personDtoChat.name}" placeholder="Enter your name">
+        <input type="text" id="surname" name="surname" required th:value="${personDtoChat.surname}" placeholder="Enter your surname">
+        <input type="text" id="nickname" name="nickname" required th:value="${personDtoChat.nickname}" placeholder="Enter your nickname">
     </div>
     <div>
         <button type="submit">Submit</button>

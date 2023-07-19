@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-persons
+      author: Papaofarci
+      changes:
+        - delete:
+            tableName: persons
+            where: id >= 36 and id <= 37
+  - changeSet:
+      id: clear-phone_details
+      author: Papaofarci
+      changes:
+        - delete:
+            tableName: phone_details
+            where: id >= 11 and id <= 15

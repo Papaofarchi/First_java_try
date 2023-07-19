@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: change-column-persons
+      id: change-column-phone_details
       author: Papaofarchi
       changes:
         - renameColumn:

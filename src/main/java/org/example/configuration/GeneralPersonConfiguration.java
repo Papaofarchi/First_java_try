@@ -18,8 +18,8 @@ public class GeneralPersonConfiguration {
     }
 
     @Bean
-    public ParsingService parsingService() {
-        return new ParsingService();
+    public FormattingService formattingService() {
+        return new FormattingService();
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.entity.dto;
 
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
@@ -9,14 +9,18 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class PersonDto {
 
-    @NotNull(message = "Nickname is mandatory")
-    private String nickname;
 
     @NotNull(message = "Name is mandatory")
     private String name;
 
     @NotNull(message = "Surname is mandatory")
     private String surname;
+
+    @NotNull(message = "Phone is mandatory")
+    private String phone;
+
+    @NotNull(message = "Email is mandatory")
+    private String email;
 
 
 }

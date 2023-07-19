@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-column-person_id-messages
+      author: Papaofarchi
+      changes:
+        - addColumn:
+            tableName: messages
+            columns:
+              - column:
+                  name: person_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+                baseTableName: messages
+                baseColumnNames: person_id
+                constraintName: fk_messages_persons
+                referencedTableName: persons
+                referencedColumnNames: id
+                onDelete: CASCADE

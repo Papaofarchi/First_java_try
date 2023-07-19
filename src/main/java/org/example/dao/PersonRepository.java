@@ -1,7 +1,7 @@
 package org.example.dao;
 
 
-import org.example.entity.ChatHistory;
+import org.example.entity.Message;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
 import org.example.service.EmailService;
@@ -18,15 +18,12 @@ public class PersonRepository {
 
     @Autowired
     private PhoneDetailsJpaRepository phoneDetailsJpaRepository;
+
     @Autowired
-    private ChatHistoryJpaRepository chatHistoryJpaRepository;
+    private MessageJpaRepository messageJpaRepository;
 
-    public void savePersons(List<Person> persons) {
-        personJpaRepository.saveAll(persons);
-    }
-
-    public Person savePerson(Person personForMerge) {
-        return personJpaRepository.save(personForMerge);
+    public Person savePerson(Person personForUpdate) {
+        return personJpaRepository.save(personForUpdate);
     }
 
     public List<Person> getPersons() {
@@ -37,39 +34,9 @@ public class PersonRepository {
         return personJpaRepository.findByNameAndSurname(name, surname);
     }
 
-    public void setPersonProperties() {
-        List<Person> updatedPersons = getPersons();
-        List<PhoneDetails> phoneDetails = getPhoneDetails();
-        String sub;
-        for (Person updatedPerson : updatedPersons) {
-            sub = updatedPerson.getPhone().substring(3, 6);
-            switch (sub) {
-                case "905":
-                    updatedPerson.setPhoneDetails(phoneDetails.get(0));
-                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
-                    break;
-                case "926":
-                    updatedPerson.setPhoneDetails(phoneDetails.get(1));
-                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
-                    break;
-                case "950":
-                    updatedPerson.setPhoneDetails(phoneDetails.get(2));
-                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
-                    break;
-                case "910":
-                    updatedPerson.setPhoneDetails(phoneDetails.get(3));
-                    updatedPerson.setEmail(emailService.generateEmail(updatedPerson));
-                    break;
-                default:
-                    updatedPerson.setPhoneDetails(phoneDetails.get(4));
-                    updatedPerson.setEmail("none");
-                    break;
-            }
-        }
-        savePersons(updatedPersons);
-    }
 
-    public void savePhoneNumbers(List<PhoneDetails> phoneNumbers) {
+
+    public void savePhoneDetails(List<PhoneDetails> phoneNumbers) {
         phoneDetailsJpaRepository.saveAll(phoneNumbers);
     }
 
@@ -77,24 +44,23 @@ public class PersonRepository {
         return phoneDetailsJpaRepository.findAll();
     }
 
-    public void saveOneHistoryEntry(ChatHistory oneEntry) {
+    public void saveOneHistoryEntry(Message oneEntry) {
         Person person = oneEntry.getPerson();
         if (person.getId() != null) {
             person = personJpaRepository.save(person);
             oneEntry.setPerson(person);
         }
-        chatHistoryJpaRepository.save(oneEntry);
+        messageJpaRepository.save(oneEntry);
     }
 
 
-
-    public List<ChatHistory> getChatHistory() {
-        return chatHistoryJpaRepository.findAll();
+    public List<Message> getChatHistory() {
+        return messageJpaRepository.findAll();
     }
 
 
-    public List<ChatHistory> getMessagesOfCertainUser(String nickname) {
-        return chatHistoryJpaRepository.findByPersonNickname(nickname);
+    public List<Message> getMessagesOfCertainUser(String nickname) {
+        return messageJpaRepository.findByPersonNickname(nickname);
     }
 }
 

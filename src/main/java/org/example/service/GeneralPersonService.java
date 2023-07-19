@@ -1,47 +1,41 @@
 package org.example.service;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dao.PersonRepository;
 import org.example.entity.Person;
-import org.example.entity.PhoneDetails;
+import org.example.entity.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-
+@Slf4j
 public class GeneralPersonService {
-    @Autowired
-    private ParsingService parse;
     @Autowired
     private PersonRepository repo;
     @Autowired
     private EmailService emailService;
     @Autowired
-    private PhoneService phoneService;
+    private FormattingService format;
+    @Autowired
+    private PhoneService phone;
 
     @SneakyThrows
-    public void init() {
-        List<Person> persons = new ArrayList<>();
-        List<PhoneDetails> phoneNumbers = new ArrayList<>();
-        System.out.println("Connecting database...");
-        FileReader fileReader = new FileReader("output.json");
-        persons = parse.parsePersons(fileReader, persons);
-        migratePhoneNumbers(persons);
-        repo.savePersons(persons);
-        parse.queryPhones(phoneNumbers);
-        repo.savePhoneNumbers(phoneNumbers);
-        repo.setPersonProperties();
-        //System.out.println("Data inserted successfully");
-        //System.out.println("Beginning of spam attack");
-        //emailService.sendEmail(repo.getPersons());
+    public void initPerson(PersonDto personDto) {
+        log.debug("Person application started successfully");
+        Person person = new Person();
+        person.setName(personDto.getName());
+        person.setSurname(personDto.getSurname());
+        person.setEmail(personDto.getEmail());
+        person.setPhone(format.formatPhone(personDto.getPhone()));
+        phone.setPersonPhoneDetails(person);
+        repo.savePerson(person);
+        emailService.sendEmail(person);
     }
-
-    public void migratePhoneNumbers(List<Person> persons) {
-        for (Person person : persons) {
-            person.setPhone(phoneService.generatePhone());
-        }
-
+    @SneakyThrows
+    public void initPerson(Person gatlingPerson) {
+        log.debug("Gatling person application started successfully");
+        phone.setPersonPhoneDetails(gatlingPerson);
+        repo.savePerson(gatlingPerson);
+        emailService.sendEmail(gatlingPerson);
     }
 }
 

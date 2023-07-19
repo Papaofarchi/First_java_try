@@ -10,16 +10,15 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "phoneDetails")
+@Table(name = "phone_details")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PhoneDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
-    @Column(name = "operatorCode")
+    @Column(name = "operator_code")
     private String operatorCode;
 
 

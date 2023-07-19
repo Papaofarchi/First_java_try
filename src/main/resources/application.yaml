@@ -19,3 +19,15 @@ spring:
 server:
   address: "127.0.0.1"
   port: 7777
+
+logging:
+  level:
+    root:
+    WARN org.springframework.boot: DEBUG
+    org.example: DEBUG
+
+features:
+sent-email:
+  enabled: false
+format-phone:
+  enabled: true

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-phone_details
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: phone_details
+            where: id >= 16 and id <= 20

@@ -6,12 +6,12 @@
 <body>
 <div id="messages">
     <div th:each="msg : ${messages}">
-        <span th:text="${msg.getMessage().getDisplayedTime()}">Time</span> <span th:text="${msg.getPerson().getNickname()}">Nickname</span>: <span
-            th:text="${msg.getMessage().getBody()}">Message</span>
+        <span th:text="${generalClient.getDisplayedTime(msg.getCreatedAt())}">Time</span> <span th:text="${msg.getPerson().getNickname()}">Nickname</span>: <span
+            th:text="${msg.getBody()}">Message</span>
     </div>
 </div>
 <form th:action="@{/discussion}" th:object="${message}" method="post">
-    <input type="text" th:field="*{message.body}"  placeholder="Enter your message" required>
+    <input type="text" th:field="*{body}"  placeholder="Enter your message" required>
     <button type="submit">Send</button>
 </form>
 <form th:action="@{/filteredMessages}" method="post">

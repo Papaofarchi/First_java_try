@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-table-phone_details
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: phone_details
+            where: id >= 1 and id <= 10
