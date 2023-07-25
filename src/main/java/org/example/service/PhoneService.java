@@ -27,8 +27,9 @@ public class PhoneService {
         }
         return queryOperators;
     }
+
     @SneakyThrows
-    public void initPhoneDetails() {
+    public String setPhoneDetails() {
         String token = "dd3aa879a0a35489e1b2e7a721ce3fdc9d871a3f";
         RestTemplate restTemplate = new RestTemplate();
         List<PhoneDetails> phoneDetails = new ArrayList<>();
@@ -41,7 +42,7 @@ public class PhoneService {
             ObjectMapper mapper = new ObjectMapper();
             PhoneDetails answer = mapper.readValue(json, PhoneDetails.class);
 
-            if (answer.getTime() != null & answer.getRegion() != null) {
+            if (answer.getTime() != null && answer.getRegion() != null) {
                 answer.setOperatorCode(phoneNumber.getOperatorCode());
                 phoneDetails.add(answer);
             } else {
@@ -55,6 +56,7 @@ public class PhoneService {
         noneOperator.setRegion("none");
         phoneDetails.add(noneOperator);
         repo.savePhoneDetails(phoneDetails);
+        return "Successes";
     }
     public void setPersonPhoneDetails(Person person) {
         List<PhoneDetails> phoneDetails = repo.getPhoneDetails();
@@ -68,7 +70,6 @@ public class PhoneService {
                 break;
             case "950":
                 person.setPhoneDetails(phoneDetails.get(2));
-
                 break;
             case "910":
                 person.setPhoneDetails(phoneDetails.get(3));

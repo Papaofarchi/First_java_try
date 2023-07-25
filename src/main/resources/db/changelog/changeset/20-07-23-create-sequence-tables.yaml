@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-persons_seq
+      author: Papaofarchi
+      runOnChange: true
+      changes:
+        - createTable:
+            tableName: persons_seq
+            columns:
+              - column:
+                  name: next_val
+                  type: bigint
+  - changeSet:
+      id: create-phone_details_seq
+      author: PapaofArchi
+      runOnChange: true
+      changes:
+        - createTable:
+            tableName: phone_details_seq
+            columns:
+              - column:
+                  name: next_val
+                  type: bigint
+  - changeSet:
+      id: create-messages_seq
+      author: PapaofArchi
+      runOnChange: true
+      changes:
+        - createTable:
+            tableName: messages_seq
+            columns:
+              - column:
+                  name: next_val
+                  type: bigint

@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-persons
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: persons
+            where: id >= 1 and id <= 10
+  - changeSet:
+      id: restart-persons_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE persons_id_seq RESTART WITH 1;
+  - changeSet:
+      id: restart-messages_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE messages_id_seq RESTART WITH 1;
+  - changeSet:
+      id: restart-chats_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE chats_id_seq RESTART WITH 1;
+  - changeSet:
+      id: add-chat_id-messages
+      author: Papaofarchi
+      changes:
+        - addColumn:
+            tableName: messages
+            columns:
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: messages
+            baseColumnNames: chat_id
+            constraintName: fk_messages_chats
+            referencedTableName: chats
+            referencedColumnNames: id
+            onDelete: CASCADE

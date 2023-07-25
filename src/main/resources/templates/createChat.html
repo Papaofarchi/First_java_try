@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Set Chat Name Page</title>
+</head>
+<body>
+<form th:action="@{/api/v1/chat/client/private/create}" th:object="${chatDto}" method="post">
+  <input type="text" th:field="*{chatName}"  placeholder="Enter chat's name" required>
+  <button type="submit">Create chat</button>
+</form>
+</body>
+</html>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Client Form</title>
+    <title>Person Form</title>
 </head>
 <body>
-<form action="/api/v1/persons/add-person" method="post">
+<form action="/api/v1/person/add" method="post">
     <div>
         <input type="text" id="name" name="name" required th:value="${personDto.name}" placeholder="Enter your name">
         <input type="text" id="surname" name="surname" required th:value="${personDto.surname}" placeholder="Enter your surname">
-        <input type="text" id="phone" name="phone" required th:value="${personDto.phone}" placeholder="Enter your phone">
+        <input type="text" id="phone" name="phone" required th:value="${personDto.phone}" placeholder="Enter your phone with +7">
         <input type="text" id="email" name="email" required th:value="${personDto.email}" placeholder="Enter your email">
     </div>
     <div>

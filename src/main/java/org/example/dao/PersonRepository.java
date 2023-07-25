@@ -1,29 +1,22 @@
 package org.example.dao;
 
 
-import org.example.entity.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.example.entity.Person;
 import org.example.entity.PhoneDetails;
-import org.example.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+@Slf4j
 public class PersonRepository {
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private PersonJpaRepository personJpaRepository;
-
     @Autowired
     private PhoneDetailsJpaRepository phoneDetailsJpaRepository;
 
-    @Autowired
-    private MessageJpaRepository messageJpaRepository;
-
     public Person savePerson(Person personForUpdate) {
-        return personJpaRepository.save(personForUpdate);
+       return personJpaRepository.save(personForUpdate);
     }
 
     public List<Person> getPersons() {
@@ -31,10 +24,26 @@ public class PersonRepository {
     }
 
     public Person getCertainPerson(String name, String surname) {
-        return personJpaRepository.findByNameAndSurname(name, surname);
+        log.debug("Пришел запрос  персона с конкретными именем '{}' и фамилией '{}'", name, surname);
+        Person certainPerson = personJpaRepository.findByNameAndSurname(name, surname);
+        if (certainPerson != null) {
+            log.debug("Найден персон с конкретными именем '{}' и фамилией '{}'", certainPerson.getName(), certainPerson.getSurname());
+        } else {
+            log.debug("Персрон с конкретными именем '{}' и фамилией '{}' не найден", name, surname);
+        }
+        return certainPerson;
     }
 
-
+    public Person getCertainPerson(String nickname) {
+        log.debug("Пришел запрос  персона с конкретным никнеймом '{}'", nickname);
+        Person certainPerson = personJpaRepository.findByNickname(nickname);
+        if (certainPerson != null) {
+            log.debug("Найден персон с конкретным никнеймом '{}'", certainPerson.getNickname());
+        } else {
+            log.debug("Персон с конкретным никнеймом '{}' не найден", nickname);
+        }
+        return certainPerson;
+    }
 
     public void savePhoneDetails(List<PhoneDetails> phoneNumbers) {
         phoneDetailsJpaRepository.saveAll(phoneNumbers);
@@ -42,25 +51,6 @@ public class PersonRepository {
 
     public List<PhoneDetails> getPhoneDetails() {
         return phoneDetailsJpaRepository.findAll();
-    }
-
-    public void saveOneHistoryEntry(Message oneEntry) {
-        Person person = oneEntry.getPerson();
-        if (person.getId() != null) {
-            person = personJpaRepository.save(person);
-            oneEntry.setPerson(person);
-        }
-        messageJpaRepository.save(oneEntry);
-    }
-
-
-    public List<Message> getChatHistory() {
-        return messageJpaRepository.findAll();
-    }
-
-
-    public List<Message> getMessagesOfCertainUser(String nickname) {
-        return messageJpaRepository.findByPersonNickname(nickname);
     }
 }
 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Choice Chats Page</title>
+</head>
+<body>
+<div id="publicChats">
+    <span>Public chats:</span>
+    <div th:each="publicChat : ${publicChats}">
+        <span th:text="${publicChat.getChatName()}">publicChatName</span> with <span
+            th:text="${publicChat.getMessages().size()}">publicQuantityMessage</span>
+        messages
+    </div>
+</div>
+<form th:action="@{/api/v1/chat/client/public/join}" th:object="${chatDto}" method="post">
+    <input type="text" th:field="*{chatName}" placeholder="Enter chat name" required>
+    <button type="submit">Join or open public chat</button>
+</form>
+<div id="users">
+    <span>Users:</span>
+    <div th:each="user : ${users}">
+        <span th:text="${user.getNickname()}">personNickname</span>
+    </div>
+</div>
+<div id="privateChats">
+    <span>Your private chats:</span>
+    <div th:each="privateChat : ${privateChats}">
+        <span th:text="${privateChat.getChatName()}">privateChatName</span> with <span
+            th:text="${privateChat.getMessages().size()}">privateQuantityMessage</span>
+    </div>
+</div>
+<form action="/api/v1/chat/client/private" method="get">
+    <input type="text" name="nicknameForPrivateOrFavouriteChat" th:value="${nicknameForPrivateOrFavouriteChat}"
+           placeholder="Enter user's nickname" required>
+    <button type="submit">Open chat</button>
+</form>
+<form action="/api/v1/chat/client/public-and-group/with-user" method="get">
+    <input type="text" name="nicknameForSearchPublicChats" th:value="${nicknameForSearchPublicChats}"
+           placeholder="Nickname for search chats" required>
+    <button type="submit">Show chats with user</button>
+</form>
+<form action="/api/v1/chat/client/favourite" method="get">
+    <button type="submit">Show your favourite chat</button>
+</form>
+</body>
+</html>
+

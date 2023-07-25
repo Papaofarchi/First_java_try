@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-phone_details_id_seq
+      author: Papaofarchi
+      changes:
+        - createSequence:
+            sequenceName: phone_details_id_seq
+            startValue: 1
+            incrementBy: 1
+            maxValue: 1000000

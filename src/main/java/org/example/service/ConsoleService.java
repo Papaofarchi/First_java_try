@@ -1,7 +1,9 @@
 package org.example.service;
 
-import java.util.Scanner;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Scanner;
+@Slf4j
 public class ConsoleService {
     Scanner in = new Scanner(System.in);
 
@@ -10,7 +12,7 @@ public class ConsoleService {
     }
 
     public void printInput(String input) {
-        System.out.println(input);
+       log.debug(input);
 
     }
 

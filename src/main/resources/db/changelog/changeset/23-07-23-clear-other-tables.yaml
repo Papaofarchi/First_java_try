@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-chats
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: chats
+            where: id = 1;
+  - changeSet:
+      id: restart-chats_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE chats_id_seq RESTART WITH 1;
+  - changeSet:
+      id: clear-chat_person
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: TRUNCATE TABLE chat_person;

@@ -1,16 +1,19 @@
 package org.example.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "persons")
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "persons_id_seq", sequenceName = "persons_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "persons_id_seq", strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name")
@@ -34,6 +37,9 @@ public class Person {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Message> messages;
+
+    @ManyToMany(mappedBy = "persons")
+    private List<Chat> chats;
 
 
 }

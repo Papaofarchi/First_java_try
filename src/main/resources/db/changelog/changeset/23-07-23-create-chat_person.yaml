@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-chat_person
+      author: Papaofarchi
+      changes:
+        - createTable:
+            tableName: chat_person
+            columns:
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: person_id
+                  type: bigint
+                  constraints:
+                    nullable: false

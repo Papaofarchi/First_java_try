@@ -21,7 +21,6 @@ public class PersonRequestSimulation extends Simulation {
             .baseUrl("http://localhost:7777")
             .acceptHeader("application/json")
             .userAgentHeader("Gatling/Performance Test");
-
     Iterator<Map<String, Object>> feeder = Stream.generate((Supplier<Map<String, Object>>) () -> {
         Faker faker = new Faker(new Locale("ru"));
         Name subName = faker.name();
@@ -31,7 +30,6 @@ public class PersonRequestSimulation extends Simulation {
         String phone = faker.phoneNumber().phoneNumber();
         return Map.of("name", name, "surname", surname, "email", email, "phone", phone);
     }).iterator();
-
     ScenarioBuilder scn = CoreDsl.scenario("Load Test Adding Persons")
             .feed(feeder)
             .exec(HttpDsl.http("add-person-request")
@@ -39,7 +37,6 @@ public class PersonRequestSimulation extends Simulation {
                     .header("Content-Type", "application/json")
                     .body(CoreDsl.StringBody("{ \"name\": \"${name}\", \"surname\": \"${surname}\", \"email\": \"${email}\", \"phone\": \"${phone}\" }"))
                     .check(HttpDsl.status().is(201)));
-
 
     public PersonRequestSimulation() {
         this.setUp(scn.injectOpen(CoreDsl.constantUsersPerSec(125).during(Duration.ofSeconds(20))))

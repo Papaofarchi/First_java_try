@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Chat Page</title>
+</head>
+<body>
+<div id="chatsForFilter">
+  <div th:each="chat : ${chatsForFilter}">
+    <span th:text="${chat.getChatName()}">chatName</span> with  <span th:text="${chat.getMessages().size()}">quantityMessage</span> messages
+  </div>
+</div>
+<form action="/api/v1/chat/client/choice" method="get">
+  <button type="submit">Back</button>
+</form>
+</body>
+</html>

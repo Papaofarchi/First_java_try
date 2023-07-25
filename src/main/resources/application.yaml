@@ -2,15 +2,15 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-    user: root
+    user: postgres
     password: root
   datasource:
-    url: "jdbc:mysql://localhost:1488/shem"
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
+    url: "jdbc:postgresql://localhost:1488/shem"
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: root
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
     hibernate:
       use-new-id-generator-mappings: false
@@ -18,7 +18,7 @@ spring:
 
 server:
   address: "127.0.0.1"
-  port: 7777
+  port: 777
 
 logging:
   level:
@@ -27,7 +27,7 @@ logging:
     org.example: DEBUG
 
 features:
-sent-email:
-  enabled: false
-format-phone:
-  enabled: true
+  sent-email:
+    enabled: false
+  format-phone:
+    enabled: true

@@ -3,7 +3,7 @@ package org.example.service;
 import org.springframework.beans.factory.annotation.Value;
 
 public class FormattingService {
-    @Value("${format-phone.enabled}")
+    @Value("${features.format-phone.enabled}")
     private boolean formatEnabled;
 
     public String formatPhone(String phone) {

@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: modify-chats_id_seq
+      author: Papaofarchi
+      changes:
+        - alterSequence:
+            sequenceName: chats_id_seq
+            startValue: 1
+            incrementBy: 1
+            maxValue: 1000000
+  - changeSet:
+      id: modify-messages_id_seq
+      author: Papaofarchi
+      changes:
+        - alterSequence:
+            sequenceName: messages_id_seq
+            startValue: 1
+            incrementBy: 1
+            maxValue: 1000000
+  - changeSet:
+      id: modify-persons_id_seq
+      author: Papaofarchi
+      changes:
+        - alterSequence:
+            sequenceName: persons_id_seq
+            startValue: 1
+            incrementBy: 1
+            maxValue: 1000000
+  - changeSet:
+      id: drop-phone_details_id_seq
+      author: Papaofarchi
+      changes:
+        - dropSequence:
+            sequenceName: phone_details_id_seq
+  - changeSet:
+      id: rename-phoneDetails_id_seq
+      author: Papaofarchi
+      changes:
+        - renameSequence:
+            oldSequenceName: phoneDetails_id_seq
+            newSequenceName:  phone_details_id_seq
+  - changeSet:
+      id: modify-phone_details_id_seq
+      author: Papaofarchi
+      changes:
+        - alterSequence:
+            sequenceName:  phone_details_id_seq
+            startValue: 1
+            incrementBy: 1
+            maxValue: 1000000

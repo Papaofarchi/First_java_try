@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
-public class PersonDtoChat {
+public class PersonChatDto {
     @NotNull(message = "Name is mandatory")
     private String name;
 

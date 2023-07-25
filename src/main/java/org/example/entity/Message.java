@@ -10,7 +10,8 @@ import java.time.ZonedDateTime;
 @Table(name = "messages")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator (name = "messages_id_seq", sequenceName = "messages_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "messages_id_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "body")
@@ -23,5 +24,7 @@ public class Message {
     @JoinColumn(name = "person_id")
     private Person person;
 
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Private Chat Page</title>
+</head>
+<body>
+<div id="chat">
+    <div th:each="msg : ${chat.getMessages()}">
+        <span th:text="${generalChat.getDisplayedTime(msg.getCreatedAt())}">Time</span> <span
+            th:text="${msg.getPerson().getNickname()}">Nickname</span>: <span
+            th:text="${msg.getBody()}">Message</span>
+    </div>
+</div>
+<form th:action="@{/api/v1/chat/client/discussion/post-message}" th:object="${messageDto}" method="post">
+    <input type="text" th:field="*{body}" placeholder="Enter your message" required>
+    <button type="submit">Send</button>
+</form>
+<form action="/api/v1/chat/client/leave" method="post">
+    <button type="submit">Leave the chat</button>
+</form>
+<form action="/api/v1/chat/client/choice" method="get">
+    <button type="submit">Back to choice chats page</button>
+</form>
+</body>
+</html>
+

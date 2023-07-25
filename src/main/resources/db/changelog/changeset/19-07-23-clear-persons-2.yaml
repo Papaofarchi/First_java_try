@@ -6,9 +6,3 @@ databaseChangeLog:
         - delete:
             tableName: persons
             where: id >= 1 and id <= 8422
-  - changeSet:
-      id: add-increment-persons
-      author: Papaofarchi
-      changes:
-        - sql:
-            sql: ALTER TABLE persons  AUTO_INCREMENT = 1;

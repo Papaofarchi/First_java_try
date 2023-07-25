@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-chats
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: chats
+            where: id >= 1 and id <= 10
+  - changeSet:
+      id: clear-chat_person
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: TRUNCATE TABLE chat_person

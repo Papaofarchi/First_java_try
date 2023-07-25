@@ -2,24 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Chat Page</title>
-    </head>
+</head>
 <body>
-<div id="messages">
-    <div th:each="msg : ${messages}">
-        <span th:text="${generalClient.getDisplayedTime(msg.getCreatedAt())}">Time</span> <span th:text="${msg.getPerson().getNickname()}">Nickname</span>: <span
+<div id="chat">
+    <div th:each="msg : ${chat.getMessages()}">
+        <span th:text="${generalChat.getDisplayedTime(msg.getCreatedAt())}">Time</span> <span
+            th:text="${msg.getPerson().getNickname()}">Nickname</span>: <span
             th:text="${msg.getBody()}">Message</span>
     </div>
 </div>
-<form th:action="@{/discussion}" th:object="${message}" method="post">
-    <input type="text" th:field="*{body}"  placeholder="Enter your message" required>
+<form th:action="@{/api/v1/chat/client/discussion/post-message}" th:object="${messageDto}" method="post">
+    <input type="text" th:field="*{body}" placeholder="Enter your message" required>
     <button type="submit">Send</button>
 </form>
-<form th:action="@{/filteredMessages}" method="post">
-    <input type="text" name="nicknameForFilter" th:value="${nicknameForFilter}" placeholder="Enter user's nickname" required>
+<form th:action="@{/api/v1/chat/client/filtered-messages}" method="get">
+    <input type="text" name="nicknameForFilter" th:value="${nicknameForFilter}" placeholder="Enter user's nickname"
+           required>
     <button type="submit">Search</button>
 </form>
-<form action="/chat/client/leave" method="post">
+<form action="/api/v1/chat/client/leave" method="post">
     <button type="submit">Leave the chat</button>
+</form>
+<form action="/api/v1/chat/client/choice" method = "get">
+    <button type="submit">Back to choice chats page</button>
 </form>
 </body>
 </html>

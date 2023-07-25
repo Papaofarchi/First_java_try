@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-chats
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: chats
+            where: id < 100

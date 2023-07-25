@@ -33,14 +33,7 @@ public class GeneralPersonConfiguration {
     }
 
     @Bean
-    public PersonRepository repositoryService() {
+    public PersonRepository personRepository() {
         return new PersonRepository();
     }
-
-    @Bean
-    public GeneralClientService clientService() {
-        return new GeneralClientService();
-    }
-
-
 }

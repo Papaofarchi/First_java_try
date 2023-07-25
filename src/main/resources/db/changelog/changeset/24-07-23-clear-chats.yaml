@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear-chats
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: chats
+            where: id >= 1 and id <= 20
+  - changeSet:
+      id: restart-chats_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE chats_id_seq RESTART WITH 1;

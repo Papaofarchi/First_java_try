@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove-duplicate-persons
+      author: Papaofarchi
+      changes:
+        - delete:
+            tableName: persons
+            where: id = 4;
+  - changeSet:
+      id: restart-persons_id_seq
+      author: Papaofarchi
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE persons_id_seq RESTART WITH 4;

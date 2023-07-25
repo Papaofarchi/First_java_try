@@ -1,14 +1,15 @@
 version: "3"
 services:
-  mysql:
-    image: mysql:8.0.33
+  postgres:
+    image: postgres:14.1
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: shem
-      MYSQL_TCP_PORT: 3366
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: shem
+      POSTGRES_PORT: 5432
     ports:
-      - "1488:3366"
+      - "1488:5432"
     volumes:
-      - data:/var/lib/mysql
+      - data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   data:

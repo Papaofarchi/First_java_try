@@ -16,12 +16,12 @@ import java.util.Properties;
 
 @Slf4j
 public class EmailService {
-    @Value("${sent-email.enabled}")
+    @Value("${features.sent-email.enabled}")
     private boolean emailEnabled;
-    private final String emailTestJava = "testjava32@gmail.com";
-    private final String passwordTestJava = "vxfltqmpqaprtcbo";
-    private final String emailJava = "java68827@gmail.com";
-    private final String passwordJava = "rhauhcmpuqtkxtbq";
+    private static final String EMAIL_TEST_JAVA = "testjava32@gmail.com";
+    private static final String PASSWORD_TEST_JAVA = "vxfltqmpqaprtcbo";
+    private static final String EMAIL_JAVA = "java68827@gmail.com";
+    private static final String PASSWORD_JAVA = "rhauhcmpuqtkxtbq";
 
     @SneakyThrows
     public void sendEmail(Person person) {
@@ -36,13 +36,13 @@ public class EmailService {
             Authenticator auth = new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(emailJava, passwordJava);
+                    return new PasswordAuthentication(EMAIL_JAVA, PASSWORD_JAVA);
                 }
             };
             Session session = Session.getInstance(props, auth);
 
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(emailJava));
+            message.setFrom(new InternetAddress(EMAIL_JAVA));
             message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(person.getEmail()));
             message.setSubject("Test email from JavaMail");
             message.setText("Person: " + person.getSurname() + " " + person.getName() + " with id: " + person.getId()
