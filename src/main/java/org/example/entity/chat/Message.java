@@ -1,11 +1,14 @@
-package org.example.entity;
+package org.example.entity.chat;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.example.entity.person.Person;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "messages")
 public class Message {

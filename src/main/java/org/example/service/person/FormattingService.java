@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.person;
 
 import org.springframework.beans.factory.annotation.Value;
 

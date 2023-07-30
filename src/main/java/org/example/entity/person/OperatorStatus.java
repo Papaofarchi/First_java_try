@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.entity.person;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

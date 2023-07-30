@@ -1,8 +1,8 @@
-package org.example.dao;
+package org.example.dao.chat;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.entity.Chat;
-import org.example.entity.ChatType;
+import org.example.entity.chat.Chat;
+import org.example.entity.chat.ChatType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -13,8 +13,8 @@ public class ChatRepository {
     private ChatJpaRepository chatJpaRepository;
 
     public Chat saveChat(Chat chat) {
-        if (chat.getMessages().size() > 0) {
-            log.debug("Пришел запрос на сохранение чата типа '{}' с последним сообщением '{}' ", chat.getType(), chat.getMessages().get(chat.getMessages().size() - 1));
+        if (!chat.getMessages().isEmpty()) {
+            log.debug("Пришел запрос на сохранение чата типа '{}' с последним сообщением '{}' с id '{}' ", chat.getType(), chat.getMessages().get(chat.getMessages().size() - 1).getBody(), chat.getMessages().get(chat.getMessages().size() - 1).getId());
         }
         return chatJpaRepository.save(chat);
     }
@@ -91,7 +91,7 @@ public class ChatRepository {
     }
 
     public void deleteChat(Chat chat) {
-        log.debug("Пришел запрос уделить конкретный чат типа '{}' с названием '{}'", chat.getType(), chat.getChatName());
+        log.debug("Пришел запрос удалить конкретный чат типа '{}' с названием '{}'", chat.getType(), chat.getChatName());
         chatJpaRepository.delete(chat);
     }
 }

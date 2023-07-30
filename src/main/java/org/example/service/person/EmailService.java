@@ -1,9 +1,9 @@
-package org.example.service;
+package org.example.service.person;
 
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.example.entity.Person;
+import org.example.entity.person.Person;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.mail.Authenticator;

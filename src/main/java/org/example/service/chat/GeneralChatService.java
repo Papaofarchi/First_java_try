@@ -1,16 +1,16 @@
-package org.example.service;
+package org.example.service.chat;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dao.ChatRepository;
-import org.example.dao.PersonRepository;
-import org.example.entity.Chat;
-import org.example.entity.ChatType;
-import org.example.entity.Message;
-import org.example.entity.Person;
-import org.example.entity.dto.ChatDto;
-import org.example.entity.dto.MessageDto;
-import org.example.entity.dto.PersonChatDto;
+import org.example.dao.chat.ChatRepository;
+import org.example.dao.person.PersonRepository;
+import org.example.entity.chat.Chat;
+import org.example.entity.chat.ChatType;
+import org.example.entity.chat.Message;
+import org.example.entity.person.Person;
+import org.example.controller.dto.chat.ChatDto;
+import org.example.controller.dto.chat.MessageDto;
+import org.example.controller.dto.person.PersonChatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
@@ -78,31 +78,28 @@ public class GeneralChatService {
         Person user = personRepo.getCertainPerson(personChatDto.getNickname());
         Chat chat = chatRepo.getCertainChat(ChatType.PUBLIC, chatDto.getChatName());
         if (chat == null) {
-            chat = createChat(chatDto, user);
             log.debug("Создание чата типа '{}' с названием '{}'", ChatType.PUBLIC, chatDto.getChatName());
-        } else if (!chat.getPersons().contains(user)) {
+            List<Person> personsForChat = new ArrayList<>();
+            personsForChat.add(user);
+            chatDto.setType(ChatType.PUBLIC);
+            return createChat(personsForChat, personChatDto, chatDto, model);
+        } else {
             chat.getPersons().add(user);
-            chat = addJoinMessage(user, chat);
-            log.debug("Сохраненый чат после вступления персона имеет последнее сообщение '{}'", chat.getMessages().get(chat.getMessages().size() - 1));
+            MessageDto messageDto = new MessageDto();
+            messageDto.setBody("join to chat");
+            if (!chat.getMessages().isEmpty()) {
+                log.debug("Сохраненый чат после вступления персона имеет последнее сообщение '{}' c id '{}'",
+                        chat.getMessages().get(chat.getMessages().size() - 1).getBody(),
+                        chat.getMessages().get(chat.getMessages().size() - 1).getId());
+            }
+            chatDto.setId(chat.getId());
+            chatDto.setType(chat.getType());
+            model.addAttribute(CHAT, chat);
+            model.addAttribute(PERSON_CHAT_DTO, personChatDto);
+            model.addAttribute(GENERAL_CHAT, this);
+            model.addAttribute(MESSAGE_DTO, new MessageDto());
+            return postMessage(chatDto, personChatDto, messageDto, model);
         }
-        chatDto.setId(chat.getId());
-        chatDto.setType(chat.getType());
-        model.addAttribute(CHAT, chat);
-        model.addAttribute(PERSON_CHAT_DTO, personChatDto);
-        model.addAttribute(GENERAL_CHAT, this);
-        model.addAttribute(MESSAGE_DTO, new MessageDto());
-        return DISCUSSION;
-    }
-
-    private Chat addJoinMessage(Person user, Chat chat) {
-        Message joinMessage = new Message();
-        joinMessage.setCreatedAt(ZonedDateTime.now());
-        joinMessage.setBody("joined the chat");
-        joinMessage.setPerson(user);
-        joinMessage.setChat(chat);
-        chat.getMessages().add(joinMessage);
-        chat = chatRepo.saveChat(chat);
-        return chat;
     }
 
     @SneakyThrows
@@ -142,34 +139,35 @@ public class GeneralChatService {
                              ChatDto chatDto,
                              Model model) {
         log.debug("Пришел запрос на создание приватного чата с '{}' {} {} {} {}", chatDto.getNicknameForCreateChat(), personChatDto, personsForPrivateChat, chatDto, model);
-        if (personsForPrivateChat.size() == 1) {
-            chatDto.setType(ChatType.FAVOURITE);
-        } else if (personsForPrivateChat.size() == 2) {
-            chatDto.setType(ChatType.PRIVATE);
-        }
-        ZonedDateTime createTime = ZonedDateTime.now();
-        List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
-        chat.setType(chatDto.getType());
-        chat.setChatName(chatDto.getChatName());
-        chat.setCreatedAt(createTime);
-        chat.setPersons(personsForPrivateChat);
         Message createMessage = new Message();
-        createMessage.setCreatedAt(createTime);
-        if (chat.getType() == ChatType.PRIVATE) {
-            createMessage.setBody("create private chat with " + chatDto.getNicknameForCreateChat());
+        if (personsForPrivateChat.size() == 1 && chatDto.getType() != ChatType.PUBLIC) {
+            createMessage.setBody("create favourite chat");
+            createMessage.setPerson(chat.getPersons().get(0));
+            chatDto.setType(ChatType.FAVOURITE);
+        } else {
+            if (personsForPrivateChat.size() == 2) {
+                chatDto.setType(ChatType.PRIVATE);
+                createMessage.setBody("create private chat with " + chatDto.getNicknameForCreateChat());
+            } else if (chatDto.getType() == ChatType.PUBLIC) {
+                createMessage.setBody("joined the chat");
+            }
             createMessage.setPerson(personsForPrivateChat.stream()
                     .filter(person -> person.getNickname().equals(personChatDto.getNickname()))
                     .findFirst()
                     .orElse(null));
-        } else {
-            createMessage.setBody("create favourite chat");
-            createMessage.setPerson(chat.getPersons().get(0));
         }
+        ZonedDateTime createTime = ZonedDateTime.now();
+        chat.setType(chatDto.getType());
+        chat.setChatName(chatDto.getChatName());
+        chat.setCreatedAt(createTime);
+        chat.setPersons(personsForPrivateChat);
+        createMessage.setCreatedAt(createTime);
         createMessage.setChat(chat);
-        messages.add(createMessage);
-        chat.setMessages(messages);
+        chat.setMessages(new ArrayList<>());
         Chat savedChat = chatRepo.saveChat(chat);
+        savedChat.getMessages().add(createMessage);
+        savedChat = chatRepo.saveChat(savedChat);
         chatDto.setId(savedChat.getId());
         model.addAttribute(CHAT, savedChat);
         model.addAttribute(GENERAL_CHAT, this);
@@ -178,21 +176,11 @@ public class GeneralChatService {
         for (Person p : chat.getPersons()) {
             log.debug("Прерсон в чате '{}'", p.getNickname());
         }
-        return PRIVATE_DISCUSSION;
-    }
-
-    @SneakyThrows
-    public Chat createChat(ChatDto chatDto, Person user) {
-        Chat chat;
-        chatDto.setType(ChatType.PUBLIC);
-        chat = new Chat();
-        chat.setCreatedAt(ZonedDateTime.now());
-        chat.setChatName(chatDto.getChatName());
-        chat.setType(ChatType.PUBLIC);
-        chat.setPersons(new ArrayList<>());
-        chat.setMessages(new ArrayList<>());
-        chat = chatRepo.saveChat(chat);
-        return addJoinMessage(user, chat);
+        if (savedChat.getType() == ChatType.PRIVATE || savedChat.getType() == ChatType.FAVOURITE) {
+            return PRIVATE_DISCUSSION;
+        } else {
+            return DISCUSSION;
+        }
     }
 
     public String getDisplayedTime(ZonedDateTime createdAt) {
@@ -229,8 +217,9 @@ public class GeneralChatService {
         oneMessage.setChat(chat);
         chat.getMessages().add(oneMessage);
         Chat savedChat = chatRepo.saveChat(chat);
-        log.debug("Сохраненый чат после отправки сообшения имеет последнее сообщение '{}'", savedChat.getMessages().get(savedChat.getMessages().size() - 1));
-
+        log.debug("Сохраненый чат после отправки сообшения имеет последнее сообщение '{}'  с id '{}'",
+                savedChat.getMessages().get(savedChat.getMessages().size() - 1).getBody(),
+                savedChat.getMessages().get(savedChat.getMessages().size() - 1).getId());
         model.addAttribute(CHAT, savedChat);
         model.addAttribute(MESSAGE_DTO, new MessageDto());
         if (chat.getType() == ChatType.PUBLIC || chat.getType() == ChatType.GROUP) {
@@ -240,9 +229,9 @@ public class GeneralChatService {
         }
     }
 
-    public String getCertainMessages(Model model,
-                                     ChatDto chatDto,
-                                     String nicknameForFilter) {
+    public String getCertainMessages(ChatDto chatDto,
+                                     String nicknameForFilter,
+                                     Model model) {
         log.debug("Получен запрос  смс от конкретного пользователя '{}' {} {}", nicknameForFilter, chatDto, model);
         Chat chat = chatRepo.getCertainChat(chatDto.getId());
         List<Message> messagesOfCertainUser = new ArrayList<>();
@@ -264,15 +253,15 @@ public class GeneralChatService {
     }
 
     public String getPrivateOrFavouriteChatPage(PersonChatDto personChatDto,
-                                                String nicknameForPrivateChat,
+                                                String nicknameForCreateChat,
                                                 Model model) {
         log.debug("Пришел запрос от '{}' на то чтобы открыть приватный чат с '{}' {} {}",
                 personChatDto.getNickname(),
-                nicknameForPrivateChat,
+                nicknameForCreateChat,
                 model,
                 personChatDto);
         Person firstUser = personRepo.getCertainPerson(personChatDto.getNickname());
-        Person secondUser = personRepo.getCertainPerson(nicknameForPrivateChat);
+        Person secondUser = personRepo.getCertainPerson(nicknameForCreateChat);
         if (secondUser != null) {
             Chat chat;
             List<Long> personsIdsForChat = new ArrayList<>();
@@ -289,7 +278,7 @@ public class GeneralChatService {
                 chatDto.setType(chat.getType());
                 chatDto.setChatName(chat.getChatName());
                 chatDto.setId(chat.getId());
-                chatDto.setNicknameForCreateChat(nicknameForPrivateChat);
+                chatDto.setNicknameForCreateChat(nicknameForCreateChat);
                 model.addAttribute(CHAT, chat);
                 model.addAttribute(MESSAGE_DTO, new MessageDto());
                 model.addAttribute(GENERAL_CHAT, this);
@@ -303,7 +292,7 @@ public class GeneralChatService {
                 List<Person> personsForCreate = new ArrayList<>();
                 personsForCreate.add(firstUser);
                 personsForCreate.add(secondUser);
-                chatDtoWithNickname.setNicknameForCreateChat(nicknameForPrivateChat);
+                chatDtoWithNickname.setNicknameForCreateChat(nicknameForCreateChat);
                 model.addAttribute(CHAT_PERSONS, personsForCreate);
                 model.addAttribute(CHAT_DTO, chatDtoWithNickname);
                 return CREATE_CHAT;

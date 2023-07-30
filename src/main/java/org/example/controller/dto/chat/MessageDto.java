@@ -1,4 +1,4 @@
-package org.example.entity.dto;
+package org.example.controller.dto.chat;
 
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;

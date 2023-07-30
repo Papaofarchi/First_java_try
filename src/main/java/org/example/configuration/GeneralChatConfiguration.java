@@ -1,7 +1,7 @@
 package org.example.configuration;
 
-import org.example.dao.ChatRepository;
-import org.example.service.GeneralChatService;
+import org.example.dao.chat.ChatRepository;
+import org.example.service.chat.GeneralChatService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

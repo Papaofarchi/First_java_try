@@ -1,6 +1,6 @@
-package org.example.dao;
+package org.example.dao.person;
 
-import org.example.entity.Person;
+import org.example.entity.person.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

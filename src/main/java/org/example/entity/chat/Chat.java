@@ -1,14 +1,15 @@
-package org.example.entity;
+package org.example.entity.chat;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.entity.person.Person;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-@Entity
 @Getter
+@Entity
 @Setter
 @Table(name = "chats")
 public class Chat {
@@ -36,3 +37,4 @@ public class Chat {
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 }
+

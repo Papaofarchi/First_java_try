@@ -1,12 +1,12 @@
-package org.example.service;
+package org.example.service.person;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dao.PersonRepository;
-import org.example.entity.OperatorStatus;
-import org.example.entity.Person;
-import org.example.entity.PhoneDetails;
+import org.example.dao.person.PersonRepository;
+import org.example.entity.person.OperatorStatus;
+import org.example.entity.person.Person;
+import org.example.entity.person.PhoneDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 

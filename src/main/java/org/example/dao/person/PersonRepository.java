@@ -1,9 +1,9 @@
-package org.example.dao;
+package org.example.dao.person;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.entity.Person;
-import org.example.entity.PhoneDetails;
+import org.example.entity.person.Person;
+import org.example.entity.person.PhoneDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

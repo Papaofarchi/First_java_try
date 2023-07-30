@@ -1,7 +1,11 @@
 package org.example.configuration;
 
-import org.example.dao.PersonRepository;
+import org.example.dao.person.PersonRepository;
 import org.example.service.*;
+import org.example.service.person.EmailService;
+import org.example.service.person.FormattingService;
+import org.example.service.person.GeneralPersonService;
+import org.example.service.person.PhoneService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,7 +1,7 @@
-package org.example.dao;
+package org.example.dao.chat;
 
-import org.example.entity.Chat;
-import org.example.entity.ChatType;
+import org.example.entity.chat.Chat;
+import org.example.entity.chat.ChatType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

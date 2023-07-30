@@ -1,7 +1,9 @@
-package org.example.entity;
+package org.example.entity.person;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.entity.chat.Chat;
+import org.example.entity.chat.Message;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,6 +42,5 @@ public class Person {
 
     @ManyToMany(mappedBy = "persons")
     private List<Chat> chats;
-
 
 }

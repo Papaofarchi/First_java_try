@@ -1,14 +1,14 @@
-package org.example.service;
+package org.example.service.person;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.example.entity.Person;
-import org.example.entity.dto.PersonChatDto;
-import org.example.entity.dto.PersonDto;
+import org.example.entity.person.Person;
+import org.example.controller.dto.person.PersonChatDto;
+import org.example.controller.dto.person.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
-import static org.example.service.GeneralChatService.PERSON_CHAT_DTO;
+import static org.example.service.chat.GeneralChatService.PERSON_CHAT_DTO;
 
 @Slf4j
 public class GeneralPersonService {
@@ -18,9 +18,10 @@ public class GeneralPersonService {
     private FormattingService format;
     @Autowired
     private PhoneService phone;
+    public static final String PERSON_DTO = "personDto";
 
-    public String showPersonForm(Model model, String personDtoAttribute) {
-        model.addAttribute(personDtoAttribute, new PersonDto());
+    public String showPersonForm(Model model) {
+        model.addAttribute(PERSON_DTO, new PersonDto());
         return "personForm";
     }
 
@@ -37,11 +38,11 @@ public class GeneralPersonService {
         model.addAttribute(PERSON_CHAT_DTO,  new PersonChatDto());
         return "clientForm";
     }
-    @SneakyThrows
+    /*@SneakyThrows
     public void addPerson(Person gatlingPerson) {
         log.debug("Gatling person application started successfully");
         phone.setPersonPhoneDetails(gatlingPerson);
         emailService.sendEmail(gatlingPerson);
-    }
+    }*/
 }
 

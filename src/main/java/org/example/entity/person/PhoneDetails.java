@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.entity.person;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

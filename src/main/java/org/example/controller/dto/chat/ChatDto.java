@@ -1,7 +1,7 @@
-package org.example.entity.dto;
+package org.example.controller.dto.chat;
 
 import lombok.Data;
-import org.example.entity.ChatType;
+import org.example.entity.chat.ChatType;
 
 @Data
 public class ChatDto {
